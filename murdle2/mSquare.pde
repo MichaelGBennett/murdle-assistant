@@ -64,4 +64,12 @@ class mSquare{
   String getText(){
     return text;
   }
+  
+  int getXIndex(){
+    return this.xIndex;
+  }
+  
+  int getYIndex(){
+    return this.yIndex;
+  }
 }

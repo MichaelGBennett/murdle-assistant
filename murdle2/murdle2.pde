@@ -82,6 +82,18 @@ void draw(){
   while (!moves.isEmpty()){
     mSquare move = moves.iterator().next();
     move.clickMe();
+    if (move.getText().equals("o")){
+      for (int i = 0; i < 12; i++){
+        mSquare horizontalSquares = grid[i][move.getYIndex()];
+        mSquare VerticalSquares = grid[move.getXIndex()][i];
+        if (horizontalSquares != null && horizontalSquares.getXIndex() / 4 == move.getXIndex() / 4){
+          if (!moves.contains(horizontalSquares)) moves.add(horizontalSquares);
+        }
+        if (VerticalSquares != null && VerticalSquares.getYIndex() / 4 == move.getYIndex() / 4){
+          if (!moves.contains(VerticalSquares)) moves.add(VerticalSquares);
+        }
+      }
+    }
     moves.remove(move);
   }
 }
