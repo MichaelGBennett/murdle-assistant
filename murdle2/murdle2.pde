@@ -1,12 +1,14 @@
 //ArrayList<mSquare> grid;
 mSquare[][] grid;
 ArrayList<mSquare> legendGrid;
+ArrayList<mSquare> moves;
 int textSize = 20;
 int xOffset = 50;
 int yOffset = 50;
 int size = 30;
 
 void setup(){
+  moves = new ArrayList<mSquare>();
   int originalYOffset = yOffset;
   grid = new mSquare[12][12];
   //grid = new ArrayList<mSquare>();
@@ -70,9 +72,6 @@ void setup(){
 void draw(){
   background(200);
   
-  //for (mSquare square : grid){
-  //  square.drawMe();
-  //}
   for (mSquare[] row : grid){
     for (mSquare square : row){
       if (square != null) square.drawMe();
@@ -82,52 +81,30 @@ void draw(){
     square.drawMe();
   }
   
+  while (!moves.isEmpty()){
+    mSquare move = moves.iterator().next();
+    move.clickMe();
+    moves.remove(move);
+  }
 }
 
 //TODO refactor code for a 2d array to clean up this math
 void mouseClicked(){
   if (mouseButton == LEFT){
-    //for (mSquare square : grid){
-    //  if (square.isClicked(mouseX, mouseY)){
-    //    square.clickMe();
-    //    if (square.getText().equals("o")){
-    //      for (mSquare xSquare : grid){
-    //        if (square.getYPOS() == xSquare.getYPOS() || square.getXPOS() == xSquare.getXPOS()){
-    //          if ((square.getXPOS() - xOffset) / size / 4 == (xSquare.getXPOS() - xOffset) / size / 4 && (square.getYPOS() - yOffset) / size / 4 == (xSquare.getYPOS() - yOffset) / size / 4){
-    //            xSquare.setText("x");
-    //          }
-    //          // if clicked square = o and xsquare = x and is outside squares box but in squares row/col
-    //          else if (xSquare.getText().equals("x")){
-    //            for (mSquare mirrorSquare : grid){
-    //              int mirrordYPOS = (xSquare.getYPOS() - yOffset) / size;
-    //              int mirrordXPOS = (xSquare.getXPOS() - xOffset) / size;
-                  
-    //              if (mirrordYPOS >= 4 && mirrordYPOS < 8) mirrordYPOS += 4;
-    //              else if (mirrordYPOS >= 8 && mirrordYPOS < 12) mirrordYPOS -= 4;
-    //              else if (mirrordYPOS >= 0 && mirrordYPOS < 4) mirrordYPOS -= 4;
-                  
-    //              if (mirrordXPOS >= 4 && mirrordXPOS < 8) mirrordXPOS += 4;
-    //              else if (mirrordXPOS >= 8 && mirrordXPOS < 12) mirrordXPOS -= 4;
-    //              else if (mirrordXPOS >= 0 && mirrordXPOS < 4) mirrordXPOS -= 4;
-                  
-    //              if (((mirrorSquare.getXPOS() - xOffset) / size == mirrordYPOS && (mirrorSquare.getYPOS() - yOffset) / size == (square.getYPOS() - yOffset) / size)
-    //                || (mirrorSquare.getYPOS() - yOffset) / size == mirrordXPOS && (mirrorSquare.getXPOS() - xOffset) / size == (square.getXPOS() - xOffset) / size){
-    //                mirrorSquare.setText("x");
-    //              }
-    //            }
-    //          }
-    //        }
-    //      }
-    //      square.setText("o");
-    //    }
-    //  }
-    //} 
+    //check if grit has been clicked
+    for (mSquare[] row : grid){
+      for (mSquare square : row){
+        if (square != null && square.isClicked(mouseX, mouseY)){
+          //MoveTuple move = new MoveTuple();
+          //move.xPOS = mouseX;
+          //move.yPOS = mouseY;
+          
+          moves.add(square);
+        }
+      }
+    }
   }
   else if (mouseButton == RIGHT){
-    //for (mSquare square : grid){
-    //  if (square.isClicked(mouseX, mouseY)){
-    //    square.setText("");
-    //  }
-    //}
+    
   }
 }
