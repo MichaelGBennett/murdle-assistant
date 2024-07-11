@@ -17,7 +17,7 @@ void setup(){
   char letter = 'A';
   for(int x = 0; x < 12; x++){
     int xPOS = x * size + xOffset;
-    mSquare letterBox = new mSquare(xPOS, 10, size);
+    mSquare letterBox = new mSquare(x, 0, xPOS, 10, size);
     letterBox.setText("" + (char)(letter + x));
     letterBox.setBGColor(0xFFFFFF);
     legendGrid.add(letterBox);
@@ -26,7 +26,7 @@ void setup(){
   String leftHandSideLetters = "MNOPIJKLEFGH";
   for(int y = 0; y < 12; y++){
     int yPOS = y * size + yOffset;
-    mSquare letterBox = new mSquare(10, yPOS, size);
+    mSquare letterBox = new mSquare(y, 0, 10, yPOS, size);
     letterBox.setText("" + leftHandSideLetters.charAt(y));
     letterBox.setBGColor(0xFFFFFF);
     legendGrid.add(letterBox);
@@ -37,28 +37,26 @@ void setup(){
     for (int y = 0; y < 4; y ++){
       int yPOS = y * size + yOffset;
       //grid.add(new mSquare(xPOS, yPOS, size));
-      grid[x][y] = new mSquare(xPOS, yPOS, size);
+      grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
       System.out.printf("x:%d y:%d\n", x, y);
     }
   }
   
-  yOffset += size * 4;
   for(int x = 0; x < 8; x++){
     int xPOS = x * size + xOffset;
-    for (int y = 0; y < 4; y ++){
+    for (int y = 4; y < 8; y ++){
       int yPOS = y * size + yOffset; 
       //grid.add(new mSquare(xPOS, yPOS, size));
-      grid[x][y + 4] = new mSquare(xPOS, yPOS, size);
+      grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
     }
   }
   
-  yOffset += size * 4;
   for(int x = 0; x < 4; x++){
     int xPOS = x * size + xOffset;
-    for (int y = 0; y < 4; y ++){
+    for (int y = 8; y < 12; y ++){
       int yPOS = y * size + yOffset;
       //grid.add(new mSquare(xPOS, yPOS, size));
-      grid[x][y + 8] = new mSquare(xPOS, yPOS, size);
+      grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
     }
   }
   

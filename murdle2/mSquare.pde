@@ -1,12 +1,16 @@
 class mSquare{
  
+  int xIndex;
+  int yIndex;
   int xPOS;
   int yPOS;
   int size;
   String text = "";
   color bgColor = #FFFFFF;
   
-  mSquare(int xPOS, int yPOS, int size){
+  mSquare(int xIndex, int yIndex, int xPOS, int yPOS, int size){
+    this.xIndex = xIndex;
+    this.yIndex = yIndex;
     this.xPOS = xPOS;
     this.yPOS = yPOS;
     this.size = size;
