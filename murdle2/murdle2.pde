@@ -38,7 +38,6 @@ void setup(){
       int yPOS = y * size + yOffset;
       //grid.add(new mSquare(xPOS, yPOS, size));
       grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
-      System.out.printf("x:%d y:%d\n", x, y);
     }
   }
   
@@ -81,16 +80,28 @@ void draw(){
   
   while (!moves.isEmpty()){
     mSquare move = moves.iterator().next();
+    System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
     move.clickMe();
     if (move.getText().equals("o")){
       for (int i = 0; i < 12; i++){
         mSquare horizontalSquares = grid[i][move.getYIndex()];
         mSquare VerticalSquares = grid[move.getXIndex()][i];
-        if (horizontalSquares != null && horizontalSquares.getXIndex() / 4 == move.getXIndex() / 4){
-          if (!moves.contains(horizontalSquares)) moves.add(horizontalSquares);
+        if (horizontalSquares != null){  
+          if (horizontalSquares.getXIndex() / 4 == move.getXIndex() / 4){
+            if (!moves.contains(horizontalSquares) && horizontalSquares.getText().equals("")){
+              moves.add(horizontalSquares);
+            }
+          }
+          else if (horizontalSquares.getText().equals("o")){
+            //int yIndex = move.getXIndex();
+            //mSquare flippedSquare = grid[horizontalSquares.getXIndex()][yIndex];
+            //moves.add(flippedSquare);
+          }
         }
         if (VerticalSquares != null && VerticalSquares.getYIndex() / 4 == move.getYIndex() / 4){
-          if (!moves.contains(VerticalSquares)) moves.add(VerticalSquares);
+          if (!moves.contains(VerticalSquares) && VerticalSquares.getText().equals("")){
+            moves.add(VerticalSquares);
+          }
         }
       }
     }
