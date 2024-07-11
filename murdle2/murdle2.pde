@@ -1,4 +1,5 @@
-ArrayList<mSquare> grid;
+//ArrayList<mSquare> grid;
+mSquare[][] grid;
 ArrayList<mSquare> legendGrid;
 int textSize = 20;
 int xOffset = 50;
@@ -7,8 +8,8 @@ int size = 30;
 
 void setup(){
   int originalYOffset = yOffset;
-  
-  grid = new ArrayList<mSquare>();
+  grid = new mSquare[12][12];
+  //grid = new ArrayList<mSquare>();
   legendGrid = new ArrayList<mSquare>();
   
   char letter = 'A';
@@ -33,7 +34,9 @@ void setup(){
     int xPOS = x * size + xOffset;
     for (int y = 0; y < 4; y ++){
       int yPOS = y * size + yOffset;
-      grid.add(new mSquare(xPOS, yPOS, size));
+      //grid.add(new mSquare(xPOS, yPOS, size));
+      grid[x][y] = new mSquare(xPOS, yPOS, size);
+      System.out.printf("x:%d y:%d\n", x, y);
     }
   }
   
@@ -42,7 +45,8 @@ void setup(){
     int xPOS = x * size + xOffset;
     for (int y = 0; y < 4; y ++){
       int yPOS = y * size + yOffset; 
-      grid.add(new mSquare(xPOS, yPOS, size));
+      //grid.add(new mSquare(xPOS, yPOS, size));
+      grid[x][y + 4] = new mSquare(xPOS, yPOS, size);
     }
   }
   
@@ -51,7 +55,8 @@ void setup(){
     int xPOS = x * size + xOffset;
     for (int y = 0; y < 4; y ++){
       int yPOS = y * size + yOffset;
-      grid.add(new mSquare(xPOS, yPOS, size));
+      //grid.add(new mSquare(xPOS, yPOS, size));
+      grid[x][y + 8] = new mSquare(xPOS, yPOS, size);
     }
   }
   
@@ -65,8 +70,13 @@ void setup(){
 void draw(){
   background(200);
   
-  for (mSquare square : grid){
-    square.drawMe();
+  //for (mSquare square : grid){
+  //  square.drawMe();
+  //}
+  for (mSquare[] row : grid){
+    for (mSquare square : row){
+      if (square != null) square.drawMe();
+    }
   }
   for (mSquare square : legendGrid){
     square.drawMe();
@@ -77,47 +87,47 @@ void draw(){
 //TODO refactor code for a 2d array to clean up this math
 void mouseClicked(){
   if (mouseButton == LEFT){
-    for (mSquare square : grid){
-      if (square.isClicked(mouseX, mouseY)){
-        square.clickMe();
-        if (square.getText().equals("o")){
-          for (mSquare xSquare : grid){
-            if (square.getYPOS() == xSquare.getYPOS() || square.getXPOS() == xSquare.getXPOS()){
-              if ((square.getXPOS() - xOffset) / size / 4 == (xSquare.getXPOS() - xOffset) / size / 4 && (square.getYPOS() - yOffset) / size / 4 == (xSquare.getYPOS() - yOffset) / size / 4){
-                xSquare.setText("x");
-              }
-              // if clicked square = o and xsquare = x and is outside squares box but in squares row/col
-              else if (xSquare.getText().equals("x")){
-                for (mSquare mirrorSquare : grid){
-                  int mirrordYPOS = (xSquare.getYPOS() - yOffset) / size;
-                  int mirrordXPOS = (xSquare.getXPOS() - xOffset) / size;
+    //for (mSquare square : grid){
+    //  if (square.isClicked(mouseX, mouseY)){
+    //    square.clickMe();
+    //    if (square.getText().equals("o")){
+    //      for (mSquare xSquare : grid){
+    //        if (square.getYPOS() == xSquare.getYPOS() || square.getXPOS() == xSquare.getXPOS()){
+    //          if ((square.getXPOS() - xOffset) / size / 4 == (xSquare.getXPOS() - xOffset) / size / 4 && (square.getYPOS() - yOffset) / size / 4 == (xSquare.getYPOS() - yOffset) / size / 4){
+    //            xSquare.setText("x");
+    //          }
+    //          // if clicked square = o and xsquare = x and is outside squares box but in squares row/col
+    //          else if (xSquare.getText().equals("x")){
+    //            for (mSquare mirrorSquare : grid){
+    //              int mirrordYPOS = (xSquare.getYPOS() - yOffset) / size;
+    //              int mirrordXPOS = (xSquare.getXPOS() - xOffset) / size;
                   
-                  if (mirrordYPOS >= 4 && mirrordYPOS < 8) mirrordYPOS += 4;
-                  else if (mirrordYPOS >= 8 && mirrordYPOS < 12) mirrordYPOS -= 4;
-                  else if (mirrordYPOS >= 0 && mirrordYPOS < 4) mirrordYPOS -= 4;
+    //              if (mirrordYPOS >= 4 && mirrordYPOS < 8) mirrordYPOS += 4;
+    //              else if (mirrordYPOS >= 8 && mirrordYPOS < 12) mirrordYPOS -= 4;
+    //              else if (mirrordYPOS >= 0 && mirrordYPOS < 4) mirrordYPOS -= 4;
                   
-                  if (mirrordXPOS >= 4 && mirrordXPOS < 8) mirrordXPOS += 4;
-                  else if (mirrordXPOS >= 8 && mirrordXPOS < 12) mirrordXPOS -= 4;
-                  else if (mirrordXPOS >= 0 && mirrordXPOS < 4) mirrordXPOS -= 4;
+    //              if (mirrordXPOS >= 4 && mirrordXPOS < 8) mirrordXPOS += 4;
+    //              else if (mirrordXPOS >= 8 && mirrordXPOS < 12) mirrordXPOS -= 4;
+    //              else if (mirrordXPOS >= 0 && mirrordXPOS < 4) mirrordXPOS -= 4;
                   
-                  if (((mirrorSquare.getXPOS() - xOffset) / size == mirrordYPOS && (mirrorSquare.getYPOS() - yOffset) / size == (square.getYPOS() - yOffset) / size)
-                    || (mirrorSquare.getYPOS() - yOffset) / size == mirrordXPOS && (mirrorSquare.getXPOS() - xOffset) / size == (square.getXPOS() - xOffset) / size){
-                    mirrorSquare.setText("x");
-                  }
-                }
-              }
-            }
-          }
-          square.setText("o");
-        }
-      }
-    } 
+    //              if (((mirrorSquare.getXPOS() - xOffset) / size == mirrordYPOS && (mirrorSquare.getYPOS() - yOffset) / size == (square.getYPOS() - yOffset) / size)
+    //                || (mirrorSquare.getYPOS() - yOffset) / size == mirrordXPOS && (mirrorSquare.getXPOS() - xOffset) / size == (square.getXPOS() - xOffset) / size){
+    //                mirrorSquare.setText("x");
+    //              }
+    //            }
+    //          }
+    //        }
+    //      }
+    //      square.setText("o");
+    //    }
+    //  }
+    //} 
   }
   else if (mouseButton == RIGHT){
-    for (mSquare square : grid){
-      if (square.isClicked(mouseX, mouseY)){
-        square.setText("");
-      }
-    }
+    //for (mSquare square : grid){
+    //  if (square.isClicked(mouseX, mouseY)){
+    //    square.setText("");
+    //  }
+    //}
   }
 }
