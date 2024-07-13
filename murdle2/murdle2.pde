@@ -1,5 +1,6 @@
 //ArrayList<mSquare> grid;
 mSquare[][] grid;
+mSquare[][] savedGrid;
 ArrayList<mSquare> legendGrid;
 ArrayList<mSquare> moves;
 int textSize = 20;
@@ -11,6 +12,7 @@ void setup(){
   moves = new ArrayList<mSquare>();
   int originalYOffset = yOffset;
   grid = new mSquare[12][12];
+  savedGrid = new mSquare[12][12];
   //grid = new ArrayList<mSquare>();
   legendGrid = new ArrayList<mSquare>();
   
@@ -38,6 +40,7 @@ void setup(){
       int yPOS = y * size + yOffset;
       //grid.add(new mSquare(xPOS, yPOS, size));
       grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      savedGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
     }
   }
   
@@ -47,6 +50,8 @@ void setup(){
       int yPOS = y * size + yOffset; 
       //grid.add(new mSquare(xPOS, yPOS, size));
       grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      savedGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+
     }
   }
   
@@ -56,6 +61,7 @@ void setup(){
       int yPOS = y * size + yOffset;
       //grid.add(new mSquare(xPOS, yPOS, size));
       grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      savedGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
     }
   }
   
@@ -224,6 +230,26 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     if (count == 3 && blank != null){
       blank.setText("x");
       moves.add(blank);
+    }
+  }
+}
+
+void keyPressed(){
+  System.out.printf("Key %s pressed\n", key);
+  if (key == 's'){
+    for(int i = 0; i < 12; i++){
+      for (int j = 0; j < 12; j++){
+        if (savedGrid[i][j] != null && grid[i][j] != null)
+        savedGrid[i][j].setText(grid[i][j].getText());
+      }
+    }
+  }
+  else if (key == 'l' || key == 'L'){
+    for(int i = 0; i < 12; i++){
+      for (int j = 0; j < 12; j++){
+        if (savedGrid[i][j] != null && grid[i][j] != null)
+        grid[i][j].setText(savedGrid[i][j].getText());
+      }
     }
   }
 }
