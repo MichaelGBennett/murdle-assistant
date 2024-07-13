@@ -92,15 +92,17 @@ void draw(){
               moves.add(horizontalSquares);
             }
           }
-          else if (horizontalSquares.getText().equals("o")){
+          else if (horizontalSquares.getText().equals("o") || horizontalSquares.getText().equals("x")){
             int yIndex = horizontalSquares.getXIndex() + 4;
             if (yIndex > 11){
               yIndex -= 8;
             }
             mSquare flippedSquare = grid[move.getXIndex()][yIndex];
-            if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
-              flippedSquare.setText("x");
-              moves.add(flippedSquare);
+            if (flippedSquare != null){
+              if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
+                if (horizontalSquares.getText().equals("o")) flippedSquare.setText("x");
+                moves.add(flippedSquare);
+              }
             }
           }
         }
