@@ -160,6 +160,12 @@ void draw(){
     }
     moves.remove(move);
   }
+  
+  for (int x = 0; x < 4; x++){
+    for (int y = 0; y < 4; y++){
+      
+    }
+  }
 }
 
 //TODO refactor code for a 2d array to clean up this math
@@ -180,5 +186,39 @@ void mouseClicked(){
   }
   else if (mouseButton == RIGHT){
     
+  }
+}
+
+void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
+  for (int x = leftX; x < leftX + 4; x++){
+    int count = 0;
+    mSquare blank = null;
+    for (int y = topY; y < topY + 4; y++){
+      if (grid[x][y].getText().equals("x")){
+        count++;
+      }
+      else if (grid[x][y].getText().equals("")){
+        blank = grid[x][y];
+      }
+    }
+    if (count == 3 && blank != null){
+      blank.setText("o");
+    }
+  }
+  
+  for (int y = topY; y < topY + 4; y++){
+    int count = 0;
+    mSquare blank = null;
+    for (int x = leftX; x < leftX + 4; x++){
+      if (grid[x][y].getText().equals("x")){
+        count++;
+      }
+      else if (grid[x][y].getText().equals("")){
+        blank = grid[x][y];
+      }
+    }
+    if (count == 3 && blank != null){
+      blank.setText("o");
+    }
   }
 }
