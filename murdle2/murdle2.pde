@@ -93,9 +93,15 @@ void draw(){
             }
           }
           else if (horizontalSquares.getText().equals("o")){
-            //int yIndex = move.getXIndex();
-            //mSquare flippedSquare = grid[horizontalSquares.getXIndex()][yIndex];
-            //moves.add(flippedSquare);
+            int yIndex = horizontalSquares.getXIndex() + 4;
+            if (yIndex > 11){
+              yIndex -= 8;
+            }
+            mSquare flippedSquare = grid[move.getXIndex()][yIndex];
+            if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
+              flippedSquare.setText("x");
+              moves.add(flippedSquare);
+            }
           }
         }
         if (VerticalSquares != null && VerticalSquares.getYIndex() / 4 == move.getYIndex() / 4){
