@@ -205,7 +205,8 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == 3 && blank != null){
-      blank.setText("o");
+      blank.setText("x");
+      moves.add(blank);
     }
   }
   
@@ -221,7 +222,8 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == 3 && blank != null){
-      blank.setText("o");
+      blank.setText("x");
+      moves.add(blank);
     }
   }
 }
