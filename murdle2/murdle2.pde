@@ -161,11 +161,14 @@ void draw(){
     moves.remove(move);
   }
   
-  for (int x = 0; x < 4; x++){
-    for (int y = 0; y < 4; y++){
-      
-    }
-  }
+  checkThreeXInBox(grid, 0, 0);
+  checkThreeXInBox(grid, 0, 4);
+  checkThreeXInBox(grid, 0, 8);
+  
+  checkThreeXInBox(grid, 4, 0);
+  checkThreeXInBox(grid, 4, 4);
+  
+  checkThreeXInBox(grid, 8, 0);
 }
 
 //TODO refactor code for a 2d array to clean up this math
