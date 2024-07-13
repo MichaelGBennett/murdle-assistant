@@ -160,6 +160,15 @@ void draw(){
     }
     moves.remove(move);
   }
+  
+  checkThreeXInBox(grid, 0, 0);
+  checkThreeXInBox(grid, 0, 4);
+  checkThreeXInBox(grid, 0, 8);
+  
+  checkThreeXInBox(grid, 4, 0);
+  checkThreeXInBox(grid, 4, 4);
+  
+  checkThreeXInBox(grid, 8, 0);
 }
 
 //TODO refactor code for a 2d array to clean up this math
@@ -180,5 +189,41 @@ void mouseClicked(){
   }
   else if (mouseButton == RIGHT){
     
+  }
+}
+
+void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
+  for (int x = leftX; x < leftX + 4; x++){
+    int count = 0;
+    mSquare blank = null;
+    for (int y = topY; y < topY + 4; y++){
+      if (grid[x][y].getText().equals("x")){
+        count++;
+      }
+      else if (grid[x][y].getText().equals("")){
+        blank = grid[x][y];
+      }
+    }
+    if (count == 3 && blank != null){
+      blank.setText("x");
+      moves.add(blank);
+    }
+  }
+  
+  for (int y = topY; y < topY + 4; y++){
+    int count = 0;
+    mSquare blank = null;
+    for (int x = leftX; x < leftX + 4; x++){
+      if (grid[x][y].getText().equals("x")){
+        count++;
+      }
+      else if (grid[x][y].getText().equals("")){
+        blank = grid[x][y];
+      }
+    }
+    if (count == 3 && blank != null){
+      blank.setText("x");
+      moves.add(blank);
+    }
   }
 }
