@@ -85,7 +85,7 @@ void draw(){
   }
   
   while (!moves.isEmpty()){
-    mSquare move = moves.iterator().next();
+    mSquare move = moves.iterator().next(); //<>//
     System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
     move.clickMe();
     if (move.getText().equals("o")){
@@ -203,7 +203,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     int count = 0;
     mSquare blank = null;
     for (int y = topY; y < topY + 4; y++){
-      if (grid[x][y].getText().equals("x")){
+      if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
         count++;
       }
       else if (grid[x][y].getText().equals("")){
@@ -211,8 +211,8 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == 3 && blank != null){
-      blank.setText("x");
-      moves.add(blank);
+      blank.setText("x"); //<>//
+      if (!moves.contains(blank)) moves.add(blank);
     }
   }
   
@@ -220,7 +220,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     int count = 0;
     mSquare blank = null;
     for (int x = leftX; x < leftX + 4; x++){
-      if (grid[x][y].getText().equals("x")){
+      if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
         count++;
       }
       else if (grid[x][y].getText().equals("")){
@@ -229,7 +229,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     }
     if (count == 3 && blank != null){
       blank.setText("x");
-      moves.add(blank);
+      if (!moves.contains(blank)) moves.add(blank);
     }
   }
 }
