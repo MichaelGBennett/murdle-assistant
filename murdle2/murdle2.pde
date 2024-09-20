@@ -194,7 +194,13 @@ void mouseClicked(){
     }
   }
   else if (mouseButton == RIGHT){
-    
+    for (mSquare[] row : grid){
+      for (mSquare square : row){
+        if (square != null && square.isClicked(mouseX, mouseY)){
+          square.setText("");
+        }
+      }
+    }
   }
 }
 
