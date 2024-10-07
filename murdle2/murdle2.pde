@@ -7,14 +7,18 @@ int textSize = 20;
 int xOffset = 50;
 int yOffset = 50;
 int size = 30;
+int murdleCategories = 4;
+int murdleSuspectCount = 4;
 
 void setup(){
   moves = new ArrayList<mSquare>();
-  int originalYOffset = yOffset;
+  //int originalYOffset = yOffset;
   grid = new mSquare[12][12];
   savedGrid = new mSquare[12][12];
   //grid = new ArrayList<mSquare>();
   legendGrid = new ArrayList<mSquare>();
+  
+  System.out.println(yOffset);
   
   char letter = 'A';
   for(int x = 0; x < 12; x++){
@@ -34,39 +38,11 @@ void setup(){
     legendGrid.add(letterBox);
   }
   
-  for(int x = 0; x < 12; x++){
-    int xPOS = x * size + xOffset;
-    for (int y = 0; y < 4; y ++){
-      int yPOS = y * size + yOffset;
-      //grid.add(new mSquare(xPOS, yPOS, size));
-      grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
-      savedGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
-    }
-  }
+  grid = newGrid(murdleCategories, murdleSuspectCount);
   
-  for(int x = 0; x < 8; x++){
-    int xPOS = x * size + xOffset;
-    for (int y = 4; y < 8; y ++){
-      int yPOS = y * size + yOffset; 
-      //grid.add(new mSquare(xPOS, yPOS, size));
-      grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
-      savedGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+  //yOffset = originalYOffset;
+  System.out.println(yOffset);
 
-    }
-  }
-  
-  for(int x = 0; x < 4; x++){
-    int xPOS = x * size + xOffset;
-    for (int y = 8; y < 12; y ++){
-      int yPOS = y * size + yOffset;
-      //grid.add(new mSquare(xPOS, yPOS, size));
-      grid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
-      savedGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
-    }
-  }
-  
-  yOffset = originalYOffset;
-  
   textAlign(CENTER);
   textSize(textSize);
   size(500, 500);
@@ -106,7 +82,7 @@ void mouseClicked(){
       mSquare move = moves.iterator().next();
       System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
       move.clickMe();
-      if (move.getText().equals("o")){
+      if (move.getText().equals("o")){ //<>//
         for (int i = 0; i < 12; i++){
           mSquare horizontalSquares = grid[i][move.getYIndex()];
           mSquare VerticalSquares = grid[move.getXIndex()][i];
@@ -234,7 +210,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
 }
 
 void checkThreeXInAllBoxes(){
-  checkThreeXInBox(grid, 0, 0);
+  checkThreeXInBox(grid, 0, 0); //<>//
   checkThreeXInBox(grid, 0, 4);
   checkThreeXInBox(grid, 0, 8);
   
@@ -262,4 +238,57 @@ void keyPressed(){
       }
     }
   }
+}
+
+mSquare[][] newGrid(int categories, int suspectCount){
+  int gridSize = categories * suspectCount;
+  mSquare[][] newGrid = new mSquare[gridSize][gridSize];
+  
+  if (categories == 3){
+    for(int x = 0; x < suspectCount * 2; x++){
+      int xPOS = x * size + xOffset;
+      for (int y = 4; y < 8; y ++){
+        int yPOS = y * size + yOffset; 
+        newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      }
+    }
+    
+    for(int x = 0; x < suspectCount; x++){
+      int xPOS = x * size + xOffset;
+      for (int y = 8; y < 12; y ++){
+        int yPOS = y * size + yOffset;
+        newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      }
+    }
+  }
+  else if (categories == 4){
+    for(int x = 0; x < suspectCount * 3; x++){
+      int xPOS = x * size + xOffset;
+      for (int y = 0; y < 4; y ++){
+        int yPOS = y * size + yOffset;
+        newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      }
+    }
+    
+    for(int x = 0; x < suspectCount * 2; x++){
+      int xPOS = x * size + xOffset;
+      for (int y = 4; y < 8; y ++){
+        int yPOS = y * size + yOffset; 
+        newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      }
+    }
+    
+    for(int x = 0; x < suspectCount; x++){
+      int xPOS = x * size + xOffset;
+      for (int y = 8; y < 12; y ++){
+        int yPOS = y * size + yOffset;
+        newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
+      }
+    }
+  }
+  else {
+    System.err.println("invalid category number");
+    return null;
+  }
+  return newGrid;
 }
