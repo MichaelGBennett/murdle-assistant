@@ -15,9 +15,7 @@ void setup(){
   grid = new mSquare[12][12];
   savedGrid = new mSquare[12][12];
   legendGrid = new ArrayList<mSquare>();
-  
-  System.out.println(yOffset);
-  
+    
   char letter = 'A';
   for(int x = 0; x < 12; x++){
     int xPOS = x * size + xOffset;
@@ -38,8 +36,6 @@ void setup(){
   
   grid = newGrid(murdleCategories, murdleSuspectCount);
   
-  System.out.println(yOffset);
-
   textAlign(CENTER);
   textSize(textSize);
   size(500, 500);
@@ -202,7 +198,6 @@ void keyPressed(){
     murdleCategories ++;
     murdleCategories %= 2;
     murdleCategories += 3;
-    System.out.println(murdleCategories);
     grid = newGrid(murdleCategories, murdleSuspectCount);
   }
 }
