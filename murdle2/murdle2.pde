@@ -12,10 +12,8 @@ int murdleSuspectCount = 4;
 
 void setup(){
   moves = new ArrayList<mSquare>();
-  //int originalYOffset = yOffset;
   grid = new mSquare[12][12];
   savedGrid = new mSquare[12][12];
-  //grid = new ArrayList<mSquare>();
   legendGrid = new ArrayList<mSquare>();
   
   System.out.println(yOffset);
@@ -40,7 +38,6 @@ void setup(){
   
   grid = newGrid(murdleCategories, murdleSuspectCount);
   
-  //yOffset = originalYOffset;
   System.out.println(yOffset);
 
   textAlign(CENTER);
