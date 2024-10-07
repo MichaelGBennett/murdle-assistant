@@ -55,7 +55,7 @@ void draw(){
   }
   for (mSquare square : legendGrid){
     square.drawMe();
-  } //<>//
+  }
 }
 
 //TODO refactor code for a 2d array to clean up this math
@@ -79,7 +79,7 @@ void mouseClicked(){
       mSquare move = moves.iterator().next();
       System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
       move.clickMe();
-      if (move.getText().equals("o")){ //<>//
+      if (move.getText().equals("o")){
         for (int i = 0; i < 12; i++){
           mSquare horizontalSquares = grid[i][move.getYIndex()];
           mSquare VerticalSquares = grid[move.getXIndex()][i];
@@ -207,7 +207,7 @@ void keyPressed(){
   }
 }
 
-void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){ //<>//
+void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
   for (int x = leftX; x < leftX + 4; x++){
     int count = 0;
     mSquare blank = null;
@@ -220,7 +220,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){ //<>//
       }
     }
     if (count == 3 && blank != null){
-      blank.setText("x"); //<>//
+      blank.setText("x");
       if (!moves.contains(blank)) moves.add(blank);
     }
   }
