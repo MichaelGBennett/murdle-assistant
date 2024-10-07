@@ -173,6 +173,26 @@ void mouseClicked(){
   }
 }
 
+void keyPressed(){
+  System.out.printf("Key %s pressed\n", key);
+  if (key == 's'){
+    for(int i = 0; i < 12; i++){
+      for (int j = 0; j < 12; j++){
+        if (savedGrid[i][j] != null && grid[i][j] != null)
+        savedGrid[i][j].setText(grid[i][j].getText());
+      }
+    }
+  }
+  else if (key == 'l' || key == 'L'){
+    for(int i = 0; i < 12; i++){
+      for (int j = 0; j < 12; j++){
+        if (savedGrid[i][j] != null && grid[i][j] != null)
+        grid[i][j].setText(savedGrid[i][j].getText());
+      }
+    }
+  }
+}
+
 void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
   for (int x = leftX; x < leftX + 4; x++){
     int count = 0;
@@ -190,7 +210,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       if (!moves.contains(blank)) moves.add(blank);
     }
   }
-  
+   //<>//
   for (int y = topY; y < topY + 4; y++){
     int count = 0;
     mSquare blank = null;
@@ -210,7 +230,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
 }
 
 void checkThreeXInAllBoxes(){
-  checkThreeXInBox(grid, 0, 0); //<>//
+  checkThreeXInBox(grid, 0, 0);
   checkThreeXInBox(grid, 0, 4);
   checkThreeXInBox(grid, 0, 8);
   
@@ -218,26 +238,6 @@ void checkThreeXInAllBoxes(){
   checkThreeXInBox(grid, 4, 4);
   
   checkThreeXInBox(grid, 8, 0);
-}
-
-void keyPressed(){
-  System.out.printf("Key %s pressed\n", key);
-  if (key == 's'){
-    for(int i = 0; i < 12; i++){
-      for (int j = 0; j < 12; j++){
-        if (savedGrid[i][j] != null && grid[i][j] != null)
-        savedGrid[i][j].setText(grid[i][j].getText());
-      }
-    }
-  }
-  else if (key == 'l' || key == 'L'){
-    for(int i = 0; i < 12; i++){
-      for (int j = 0; j < 12; j++){
-        if (savedGrid[i][j] != null && grid[i][j] != null)
-        grid[i][j].setText(savedGrid[i][j].getText());
-      }
-    }
-  }
 }
 
 mSquare[][] newGrid(int categories, int suspectCount){
