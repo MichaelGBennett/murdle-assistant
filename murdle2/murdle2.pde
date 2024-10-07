@@ -197,6 +197,7 @@ void keyPressed(){
   }
   else if (keyCode == DOWN){
     murdleSuspectCount--;
+    if (murdleSuspectCount <= 0) murdleSuspectCount++;
     grid = newGrid(murdleCategories, murdleSuspectCount);
   }
   else if (keyCode == RIGHT){
@@ -209,8 +210,8 @@ void keyPressed(){
   }
 }
 
-void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
-  for (int x = leftX; x < leftX + 4; x++){ //<>//
+void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){ //<>//
+  for (int x = leftX; x < leftX + 4; x++){
     int count = 0;
     mSquare blank = null;
     for (int y = topY; y < topY + 4; y++){
