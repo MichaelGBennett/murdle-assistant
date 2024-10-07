@@ -191,10 +191,26 @@ void keyPressed(){
       }
     }
   }
+  else if (keyCode == UP){
+    murdleSuspectCount++;
+    grid = newGrid(murdleCategories, murdleSuspectCount);
+  }
+  else if (keyCode == DOWN){
+    murdleSuspectCount--;
+    grid = newGrid(murdleCategories, murdleSuspectCount);
+  }
+  else if (keyCode == RIGHT){
+    murdleCategories -= 3;
+    murdleCategories ++;
+    murdleCategories %= 2;
+    murdleCategories += 3;
+    System.out.println(murdleCategories);
+    grid = newGrid(murdleCategories, murdleSuspectCount);
+  }
 }
 
 void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
-  for (int x = leftX; x < leftX + 4; x++){
+  for (int x = leftX; x < leftX + 4; x++){ //<>//
     int count = 0;
     mSquare blank = null;
     for (int y = topY; y < topY + 4; y++){
@@ -210,7 +226,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       if (!moves.contains(blank)) moves.add(blank);
     }
   }
-   //<>//
+  
   for (int y = topY; y < topY + 4; y++){
     int count = 0;
     mSquare blank = null;
@@ -247,7 +263,7 @@ mSquare[][] newGrid(int categories, int suspectCount){
   if (categories == 3){
     for(int x = 0; x < suspectCount * 2; x++){
       int xPOS = x * size + xOffset;
-      for (int y = 4; y < 8; y ++){
+      for (int y = 0; y < suspectCount; y ++){
         int yPOS = y * size + yOffset; 
         newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
       }
@@ -255,7 +271,7 @@ mSquare[][] newGrid(int categories, int suspectCount){
     
     for(int x = 0; x < suspectCount; x++){
       int xPOS = x * size + xOffset;
-      for (int y = 8; y < 12; y ++){
+      for (int y = suspectCount; y < suspectCount * 2; y ++){
         int yPOS = y * size + yOffset;
         newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
       }
@@ -264,7 +280,7 @@ mSquare[][] newGrid(int categories, int suspectCount){
   else if (categories == 4){
     for(int x = 0; x < suspectCount * 3; x++){
       int xPOS = x * size + xOffset;
-      for (int y = 0; y < 4; y ++){
+      for (int y = 0; y < suspectCount; y ++){
         int yPOS = y * size + yOffset;
         newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
       }
@@ -272,7 +288,7 @@ mSquare[][] newGrid(int categories, int suspectCount){
     
     for(int x = 0; x < suspectCount * 2; x++){
       int xPOS = x * size + xOffset;
-      for (int y = 4; y < 8; y ++){
+      for (int y = suspectCount; y < suspectCount * 2; y ++){
         int yPOS = y * size + yOffset; 
         newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
       }
@@ -280,7 +296,7 @@ mSquare[][] newGrid(int categories, int suspectCount){
     
     for(int x = 0; x < suspectCount; x++){
       int xPOS = x * size + xOffset;
-      for (int y = 8; y < 12; y ++){
+      for (int y = suspectCount * 2; y < suspectCount * 3; y ++){
         int yPOS = y * size + yOffset;
         newGrid[x][y] = new mSquare(x, y, xPOS, yPOS, size);
       }
