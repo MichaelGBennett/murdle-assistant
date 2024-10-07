@@ -197,7 +197,7 @@ void keyPressed(){
   }
   else if (keyCode == DOWN){
     murdleSuspectCount--;
-    if (murdleSuspectCount <= 0) murdleSuspectCount++;
+    if (murdleSuspectCount <= 0) murdleSuspectCount = 1;
     grid = newGrid(murdleCategories, murdleSuspectCount);
   }
   else if (keyCode == RIGHT){
