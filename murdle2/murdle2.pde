@@ -120,10 +120,10 @@ void keyPressed(){
 }
 
 void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
-  for (int x = leftX; x < leftX + 4; x++){
+  for (int x = leftX; x < leftX + murdleSuspectCount; x++){
     int count = 0;
     mSquare blank = null;
-    for (int y = topY; y < topY + 4; y++){
+    for (int y = topY; y < topY + murdleSuspectCount; y++){
       if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
         count++;
       }
@@ -131,16 +131,16 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
         blank = grid[x][y];
       }
     }
-    if (count == 3 && blank != null){
+    if (count == murdleSuspectCount - 1 && blank != null){
       blank.setText("x");
       if (!moves.contains(blank)) moves.add(blank);
     }
   }
   
-  for (int y = topY; y < topY + 4; y++){
+  for (int y = topY; y < topY + murdleSuspectCount; y++){
     int count = 0;
     mSquare blank = null;
-    for (int x = leftX; x < leftX + 4; x++){
+    for (int x = leftX; x < leftX + murdleSuspectCount; x++){
       if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
         count++;
       }
@@ -148,7 +148,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
         blank = grid[x][y];
       }
     }
-    if (count == 3 && blank != null){
+    if (count == murdleSuspectCount - 1 && blank != null){
       blank.setText("x");
       if (!moves.contains(blank)) moves.add(blank);
     }
@@ -157,13 +157,13 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
 
 void checkThreeXInAllBoxes(){
   checkThreeXInBox(grid, 0, 0);
-  checkThreeXInBox(grid, 0, 4);
-  checkThreeXInBox(grid, 0, 8);
+  checkThreeXInBox(grid, 0, murdleSuspectCount);
+  checkThreeXInBox(grid, 0, murdleSuspectCount * 2);
   
-  checkThreeXInBox(grid, 4, 0);
-  checkThreeXInBox(grid, 4, 4);
+  checkThreeXInBox(grid, murdleSuspectCount, 0);
+  checkThreeXInBox(grid, murdleSuspectCount, murdleSuspectCount);
   
-  checkThreeXInBox(grid, 8, 0);
+  checkThreeXInBox(grid, murdleSuspectCount * 2, 0);
 }
 
 mSquare[][] newGrid(int categories, int suspectCount){
@@ -285,7 +285,7 @@ void processMoves(){
             }
             if (move.getYIndex() >= murdleSuspectCount){
               int xIndex = move.getYIndex() + murdleSuspectCount;
-              if (xIndex > gridSize){
+              if (xIndex >= gridSize){
                 xIndex -= murdleSuspectCount * 2;
               }
               mSquare flippedSquare = grid[xIndex][VerticalSquares.getYIndex()];
