@@ -221,7 +221,6 @@ mSquare[][] newGrid(int categories, int suspectCount){
 
 void processMoves(){
   while (!moves.isEmpty()){
-    checkThreeXInAllBoxes();
     mSquare move = moves.iterator().next();
     System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
     move.clickMe();
@@ -302,5 +301,6 @@ void processMoves(){
       }
     }
     moves.remove(move);
+    checkThreeXInAllBoxes();
   }
 }
