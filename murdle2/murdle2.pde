@@ -225,20 +225,20 @@ void processMoves(){
     System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
     move.clickMe();
     if (move.getText().equals("o")){
-      for (int i = 0; i < 12; i++){
+      for (int i = 0; i < gridSize; i++){
         mSquare horizontalSquares = grid[i][move.getYIndex()];
         mSquare VerticalSquares = grid[move.getXIndex()][i];
         if (horizontalSquares != null){
-          if (horizontalSquares.getXIndex() / 4 == move.getXIndex() / 4){
+          if (horizontalSquares.getXIndex() == move.getXIndex()){
             if (!moves.contains(horizontalSquares) && horizontalSquares.getText().equals("")){
               moves.add(horizontalSquares);
             }
           }
           else if (horizontalSquares.getText().equals("o") || horizontalSquares.getText().equals("x")){
-            if(horizontalSquares.getXIndex() >= 4){
-              int yIndex = horizontalSquares.getXIndex() + 4;
-              if (yIndex > 11){
-                yIndex -= 8;
+            if(horizontalSquares.getXIndex() >= murdleSuspectCount){
+              int yIndex = horizontalSquares.getXIndex() + murdleSuspectCount;
+              if (yIndex >= gridSize){
+                yIndex -= murdleSuspectCount * 2;
               }
               mSquare flippedSquare = grid[move.getXIndex()][yIndex];
               if (flippedSquare != null){
@@ -248,10 +248,10 @@ void processMoves(){
                 }
               }
             }
-            if (move.getXIndex() >= 4){
-              int yIndex = move.getXIndex() + 4;
-              if (yIndex > 11){
-                yIndex -= 8;
+            if (move.getXIndex() >= murdleSuspectCount){
+              int yIndex = move.getXIndex() + murdleSuspectCount;
+              if (yIndex >= gridSize){
+                yIndex -= murdleSuspectCount * 2;
               }
               mSquare flippedSquare = grid[horizontalSquares.getXIndex()][yIndex];
               if (flippedSquare != null){
@@ -264,16 +264,16 @@ void processMoves(){
           }
         }
         if (VerticalSquares != null){
-          if (VerticalSquares.getYIndex() / 4 == move.getYIndex() / 4){
+          if (VerticalSquares.getYIndex() == move.getYIndex()){
             if (!moves.contains(VerticalSquares) && VerticalSquares.getText().equals("")){
               moves.add(VerticalSquares);
             }
           }
           else if (VerticalSquares.getText().equals("o") || VerticalSquares.getText().equals("x")){
-            if (VerticalSquares.getYIndex() >= 4){
-              int xIndex = VerticalSquares.getYIndex() + 4;
-              if (xIndex > 11){
-                xIndex -= 8;
+            if (VerticalSquares.getYIndex() >= murdleSuspectCount){
+              int xIndex = VerticalSquares.getYIndex() + murdleSuspectCount;
+              if (xIndex >= gridSize){
+                xIndex -= murdleSuspectCount * 2;
               }
               mSquare flippedSquare = grid[xIndex][move.getYIndex()];
               if (flippedSquare != null){
@@ -283,10 +283,10 @@ void processMoves(){
                 }
               }
             }
-            if (move.getYIndex() >= 4){
-              int xIndex = move.getYIndex() + 4;
-              if (xIndex > 11){
-                xIndex -= 8;
+            if (move.getYIndex() >= murdleSuspectCount){
+              int xIndex = move.getYIndex() + murdleSuspectCount;
+              if (xIndex > gridSize){
+                xIndex -= murdleSuspectCount * 2;
               }
               mSquare flippedSquare = grid[xIndex][VerticalSquares.getYIndex()];
               if (flippedSquare != null){
