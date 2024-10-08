@@ -9,7 +9,7 @@ int yOffset = 50;
 int size = 30;
 int murdleCategories = 4;
 int murdleSuspectCount = 4;
-int gridSize = murdleCategories * murdleSuspectCount;
+int gridSize = (murdleCategories - 1) * murdleSuspectCount;
 
 void setup(){
   moves = new ArrayList<mSquare>();
@@ -167,7 +167,7 @@ void checkThreeXInAllBoxes(){
 }
 
 mSquare[][] newGrid(int categories, int suspectCount){
-  gridSize = categories * suspectCount;
+  gridSize = (categories - 1) * suspectCount;
   mSquare[][] newGrid = new mSquare[gridSize][gridSize];
   
   if (categories == 3){
@@ -229,7 +229,7 @@ void processMoves(){
         mSquare horizontalSquares = grid[i][move.getYIndex()];
         mSquare VerticalSquares = grid[move.getXIndex()][i];
         if (horizontalSquares != null){
-          if (horizontalSquares.getXIndex() == move.getXIndex()){
+          if (horizontalSquares.getXIndex() / murdleSuspectCount == move.getXIndex() / murdleSuspectCount){
             if (!moves.contains(horizontalSquares) && horizontalSquares.getText().equals("")){
               moves.add(horizontalSquares);
             }
@@ -264,7 +264,7 @@ void processMoves(){
           }
         }
         if (VerticalSquares != null){
-          if (VerticalSquares.getYIndex() == move.getYIndex()){
+          if (VerticalSquares.getYIndex() / murdleSuspectCount == move.getYIndex() / murdleSuspectCount){
             if (!moves.contains(VerticalSquares) && VerticalSquares.getText().equals("")){
               moves.add(VerticalSquares);
             }
