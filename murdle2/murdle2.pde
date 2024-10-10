@@ -217,10 +217,6 @@ mSquare[][] newGrid(int categories, int suspectCount){
     return null;
   }
   return newGrid;
-//              if (yIndex >= gridSize){
-//                yIndex -= murdleSuspectCount * 2;
-//              }
-//            }
 
 void processMoves(){
   while (!moves.isEmpty()){
