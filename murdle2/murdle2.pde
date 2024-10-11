@@ -10,6 +10,8 @@ int size = 30;
 int murdleCategories = 4;
 int murdleSuspectCount = 4;
 int gridSize = (murdleCategories - 1) * murdleSuspectCount;
+mSquare selectedIconDisplay;
+String selectedIcon = "x";
 
 void setup(){
   moves = new ArrayList<mSquare>();
@@ -37,6 +39,9 @@ void setup(){
   
   grid = newGrid(murdleCategories, murdleSuspectCount);
   
+  selectedIconDisplay = new mSquare(1, 1, 10, 10, size);
+  selectedIconDisplay.setText(selectedIcon);
+  
   textAlign(CENTER);
   textSize(textSize);
   size(500, 500);
@@ -53,6 +58,9 @@ void draw(){
   for (mSquare square : legendGrid){
     square.drawMe();
   }
+  
+  selectedIconDisplay.drawMe();
+  selectedIconDisplay.setText(selectedIcon);
 }
 
 //TODO refactor code for a 2d array to clean up this math
@@ -100,6 +108,12 @@ void keyPressed(){
         grid[i][j].setText(savedGrid[i][j].getText());
       }
     }
+  }
+  else if (key == 'x'){
+    selectedIcon = "x";
+  }
+  else if (key == 'o'){
+    selectedIcon = "o";
   }
   else if (keyCode == UP){
     murdleSuspectCount++;
