@@ -217,6 +217,7 @@ mSquare[][] newGrid(int categories, int suspectCount){
     return null;
   }
   return newGrid;
+}
 
 void processMoves(){
   while (!moves.isEmpty()){
@@ -300,7 +301,7 @@ void setRightOtoX(mSquare xSquare, mSquare right){
 }
 
 void setCrossXfromO(mSquare oSquare){
-  int yIndex = oSquare.getYIndex(); //<>//
+  int yIndex = oSquare.getYIndex();
   int xIndex = oSquare.getXIndex();
   if (yIndex > 0) setAboveOtoX(oSquare, grid[xIndex][yIndex -1]);
   if (xIndex > 0) setLeftOtoX(oSquare, grid[xIndex -1][yIndex]);
