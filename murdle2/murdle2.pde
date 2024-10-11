@@ -2,7 +2,7 @@
 mSquare[][] grid;
 mSquare[][] savedGrid;
 ArrayList<mSquare> legendGrid;
-ArrayList<mSquare> moves;
+ArrayList<Move> moves;
 int textSize = 20;
 int xOffset = 50;
 int yOffset = 50;
@@ -14,7 +14,7 @@ mSquare selectedIconDisplay;
 String selectedIcon = "x";
 
 void setup(){
-  moves = new ArrayList<mSquare>();
+  moves = new ArrayList<Move>();
   grid = new mSquare[12][12];
   savedGrid = new mSquare[12][12];
   legendGrid = new ArrayList<mSquare>();
@@ -70,11 +70,7 @@ void mouseClicked(){
     for (mSquare[] row : grid){
       for (mSquare square : row){
         if (square != null && square.isClicked(mouseX, mouseY)){
-          //MoveTuple move = new MoveTuple();
-          //move.xPOS = mouseX;
-          //move.yPOS = mouseY;
-          
-          moves.add(square);
+          moves.add(new Move(square, selectedIcon));
         }
       }
     }
@@ -138,7 +134,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     int count = 0;
     mSquare blank = null;
     for (int y = topY; y < topY + murdleSuspectCount; y++){
-      if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
+      if (grid[x][y].getText().equals("x") && !hasMove(moves, grid[x][y])){
         count++;
       }
       else if (grid[x][y].getText().equals("")){
@@ -146,8 +142,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == murdleSuspectCount - 1 && blank != null){
-      blank.setText("x");
-      if (!moves.contains(blank)) moves.add(blank);
+      if (!hasMove(moves, blank)) moves.add(new Move(blank, "o"));
     }
   }
   
@@ -155,7 +150,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     int count = 0;
     mSquare blank = null;
     for (int x = leftX; x < leftX + murdleSuspectCount; x++){
-      if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
+      if (grid[x][y].getText().equals("x") && !hasMove(moves, grid[x][y])){
         count++;
       }
       else if (grid[x][y].getText().equals("")){
@@ -163,8 +158,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == murdleSuspectCount - 1 && blank != null){
-      blank.setText("x");
-      if (!moves.contains(blank)) moves.add(blank);
+      if (!hasMove(moves, blank)) moves.add(new Move(blank, "o"));
     }
   }
 }
@@ -235,21 +229,24 @@ mSquare[][] newGrid(int categories, int suspectCount){
 
 void processMoves(){
   while (!moves.isEmpty()){
-    mSquare move = moves.iterator().next();
+    Move move = moves.iterator().next();
     moves.remove(move);
-    if (move == null){
+    if (move == null || move.getMove() == null){
       continue;
     }
-    move.clickMe();
+    mSquare target = move.getMove();
+    String selectedText = move.getMoveText();
+    target.setText(selectedText);
+    
     //move is an o
-    if (move.getText().equals("o")){
+    if (target.getText().equals("o")){
       //add x in row and column of same box
-      setCrossXfromO(move);
+      setCrossXfromO(target);
       //mirror symbols in other boxes across the O diagonal
       
     }
     //move is an x
-    if (move.getText().equals("x")){
+    if (target.getText().equals("x")){
     }
     checkThreeXInAllBoxes();
   }
@@ -269,8 +266,8 @@ boolean inSameBox(mSquare s1, mSquare s2){
 void setAboveOtoX(mSquare xSquare, mSquare up){
   if (up == null) return;
   if (!inSameBox(xSquare, up)) return;
-  if (!moves.contains(up) && up.getText().equals("")){
-    moves.add(up);
+  if (!hasMove(moves, up) && up.getText().equals("")){
+    moves.add(new Move(up, "x"));
   }
   int yIndex = up.getYIndex();
   if (yIndex > 0) {
@@ -281,8 +278,8 @@ void setAboveOtoX(mSquare xSquare, mSquare up){
 void setBelowOtoX(mSquare xSquare, mSquare down){
   if (down == null) return;
   if (!inSameBox(xSquare, down)) return;
-  if (!moves.contains(down) && down.getText().equals("")){
-    moves.add(down);
+  if (!hasMove(moves, down) && down.getText().equals("")){
+    moves.add(new Move(down, "x"));
   }
   int yIndex = down.getYIndex();
   if (yIndex < gridSize - 1) {
@@ -293,8 +290,8 @@ void setBelowOtoX(mSquare xSquare, mSquare down){
 void setLeftOtoX(mSquare xSquare, mSquare left){
   if (left == null) return;
   if (!inSameBox(xSquare, left)) return;
-  if (!moves.contains(left) && left.getText().equals("")){
-    moves.add(left);
+  if (!hasMove(moves, left) && left.getText().equals("")){
+    moves.add(new Move(left, "x"));
   }
   int xIndex = left.getXIndex();
   if (xIndex > 0) {
@@ -305,8 +302,8 @@ void setLeftOtoX(mSquare xSquare, mSquare left){
 void setRightOtoX(mSquare xSquare, mSquare right){
   if (right == null) return;
   if (!inSameBox(xSquare, right)) return;
-  if (!moves.contains(right) && right.getText().equals("")){
-    moves.add(right);
+  if (!hasMove(moves, right) && right.getText().equals("")){
+    moves.add(new Move(right, "x"));
   }
   int xIndex = right.getXIndex();
   if (xIndex < gridSize - 1) {
@@ -321,4 +318,11 @@ void setCrossXfromO(mSquare oSquare){
   if (xIndex > 0) setLeftOtoX(oSquare, grid[xIndex -1][yIndex]);
   if (yIndex < gridSize -1) setBelowOtoX(oSquare, grid[xIndex][yIndex +1]);
   if (xIndex < gridSize -1) setRightOtoX(oSquare, grid[xIndex +1][yIndex]);
+}
+
+boolean hasMove(ArrayList<Move> moves, mSquare move){
+  for (Move m: moves){
+    if (move == m.getMove()) return true;
+  }
+  return false;
 }
