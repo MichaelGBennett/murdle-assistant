@@ -243,10 +243,55 @@ void processMoves(){
       //add x in row and column of same box
       setCrossXfromO(target);
       //mirror symbols in other boxes across the O diagonal
-      
+      for (int i = 4; i < gridSize; i++){
+        mSquare horizontalSquare = grid[i][target.getYIndex()];
+        if (horizontalSquare != null && !inSameBox(target, horizontalSquare) && !horizontalSquare.getText().equals("")){
+          int yIndex = horizontalSquare.getXIndex();
+          int xIndex = target.getXIndex();
+          if (murdleCategories == 4){
+            yIndex += murdleSuspectCount;
+            if (yIndex >= gridSize) yIndex -= murdleSuspectCount * 2;
+          }
+          mSquare flippedSquare = grid[xIndex][yIndex];
+          if (flippedSquare != null && !hasMove(moves, flippedSquare) && flippedSquare.getText().equals("")){
+            moves.add(new Move(flippedSquare, horizontalSquare.getText()));
+          }
+        }
+        mSquare VerticalSquare = grid[target.getXIndex()][i];
+        if (VerticalSquare != null && !inSameBox(target, VerticalSquare) && !VerticalSquare.getText().equals("")){
+          int yIndex = VerticalSquare.getYIndex();
+          int xIndex = target.getYIndex();
+        }
+      }
     }
-    //move is an x
-    if (target.getText().equals("x")){
+    //move is in an o row or col
+    for (int i = 0; i < gridSize; i++){
+      mSquare horizontalSquare = grid[i][target.getYIndex()];
+      if (horizontalSquare != null && !inSameBox(target, horizontalSquare) && horizontalSquare.getText().equals("o")){
+        int xIndex = horizontalSquare.getXIndex();
+        int yIndex = target.getXIndex();
+        if (murdleCategories == 4){
+          yIndex += murdleSuspectCount;
+          if (yIndex >= gridSize) yIndex -= murdleSuspectCount * 2;
+        }
+        mSquare flippedSquare = grid[xIndex][yIndex];
+        if (flippedSquare != null && !hasMove(moves, flippedSquare) && flippedSquare.getText().equals("")){
+          moves.add(new Move(flippedSquare, selectedText));
+        }
+      }
+      mSquare VerticalSquare = grid[target.getXIndex()][i];
+      if (VerticalSquare != null && !inSameBox(target, VerticalSquare) && VerticalSquare.getText().equals("o")){
+        int yIndex = VerticalSquare.getYIndex();
+        int xIndex = target.getYIndex();
+        if (murdleCategories == 4){
+          xIndex += murdleSuspectCount;
+          if (xIndex >= gridSize) xIndex -= murdleSuspectCount * 2;
+        }
+        mSquare flippedSquare = grid[xIndex][yIndex];
+        if (flippedSquare != null && !hasMove(moves, flippedSquare) && flippedSquare.getText().equals("")){
+          moves.add(new Move(flippedSquare, selectedText));
+        }
+      }
     }
     checkThreeXInAllBoxes();
   }
