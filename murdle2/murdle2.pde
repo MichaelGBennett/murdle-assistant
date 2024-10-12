@@ -2,7 +2,7 @@
 mSquare[][] grid;
 mSquare[][] savedGrid;
 ArrayList<mSquare> legendGrid;
-ArrayList<mSquare> moves;
+ArrayList<Move> moves;
 int textSize = 20;
 int xOffset = 50;
 int yOffset = 50;
@@ -10,9 +10,11 @@ int size = 30;
 int murdleCategories = 4;
 int murdleSuspectCount = 4;
 int gridSize = (murdleCategories - 1) * murdleSuspectCount;
+mSquare selectedIconDisplay;
+String selectedIcon = "x";
 
 void setup(){
-  moves = new ArrayList<mSquare>();
+  moves = new ArrayList<Move>();
   grid = new mSquare[12][12];
   savedGrid = new mSquare[12][12];
   legendGrid = new ArrayList<mSquare>();
@@ -37,6 +39,9 @@ void setup(){
   
   grid = newGrid(murdleCategories, murdleSuspectCount);
   
+  selectedIconDisplay = new mSquare(1, 1, 10, 10, size);
+  selectedIconDisplay.setText(selectedIcon);
+  
   textAlign(CENTER);
   textSize(textSize);
   size(500, 500);
@@ -53,6 +58,9 @@ void draw(){
   for (mSquare square : legendGrid){
     square.drawMe();
   }
+  
+  selectedIconDisplay.drawMe();
+  selectedIconDisplay.setText(selectedIcon);
 }
 
 //TODO refactor code for a 2d array to clean up this math
@@ -62,11 +70,7 @@ void mouseClicked(){
     for (mSquare[] row : grid){
       for (mSquare square : row){
         if (square != null && square.isClicked(mouseX, mouseY)){
-          //MoveTuple move = new MoveTuple();
-          //move.xPOS = mouseX;
-          //move.yPOS = mouseY;
-          
-          moves.add(square);
+          moves.add(new Move(square, selectedIcon));
         }
       }
     }
@@ -101,6 +105,12 @@ void keyPressed(){
       }
     }
   }
+  else if (key == 'x'){
+    selectedIcon = "x";
+  }
+  else if (key == 'o'){
+    selectedIcon = "o";
+  }
   else if (keyCode == UP){
     murdleSuspectCount++;
     grid = newGrid(murdleCategories, murdleSuspectCount);
@@ -124,7 +134,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     int count = 0;
     mSquare blank = null;
     for (int y = topY; y < topY + murdleSuspectCount; y++){
-      if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
+      if (grid[x][y].getText().equals("x") && !hasMove(moves, grid[x][y])){
         count++;
       }
       else if (grid[x][y].getText().equals("")){
@@ -132,8 +142,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == murdleSuspectCount - 1 && blank != null){
-      blank.setText("x");
-      if (!moves.contains(blank)) moves.add(blank);
+      if (!hasMove(moves, blank)) moves.add(new Move(blank, "o"));
     }
   }
   
@@ -141,7 +150,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
     int count = 0;
     mSquare blank = null;
     for (int x = leftX; x < leftX + murdleSuspectCount; x++){
-      if (grid[x][y].getText().equals("x") && !moves.contains(grid[x][y])){
+      if (grid[x][y].getText().equals("x") && !hasMove(moves, grid[x][y])){
         count++;
       }
       else if (grid[x][y].getText().equals("")){
@@ -149,8 +158,7 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
       }
     }
     if (count == murdleSuspectCount - 1 && blank != null){
-      blank.setText("x");
-      if (!moves.contains(blank)) moves.add(blank);
+      if (!hasMove(moves, blank)) moves.add(new Move(blank, "o"));
     }
   }
 }
@@ -221,86 +229,146 @@ mSquare[][] newGrid(int categories, int suspectCount){
 
 void processMoves(){
   while (!moves.isEmpty()){
-    mSquare move = moves.iterator().next();
-    System.out.printf("processing move %d %d\n", move.getXIndex(), move.getYIndex());
-    move.clickMe();
-    if (move.getText().equals("o")){
-      for (int i = 0; i < gridSize; i++){
-        mSquare horizontalSquares = grid[i][move.getYIndex()];
-        mSquare VerticalSquares = grid[move.getXIndex()][i];
-        if (horizontalSquares != null){
-          if (horizontalSquares.getXIndex() / murdleSuspectCount == move.getXIndex() / murdleSuspectCount){
-            if (!moves.contains(horizontalSquares) && horizontalSquares.getText().equals("")){
-              moves.add(horizontalSquares);
-            }
+    Move move = moves.iterator().next();
+    moves.remove(move);
+    if (move == null || move.getMove() == null){
+      continue;
+    }
+    mSquare target = move.getMove();
+    String selectedText = move.getMoveText();
+    target.setText(selectedText);
+    
+    //move is an o
+    if (target.getText().equals("o")){
+      //add x in row and column of same box
+      setCrossXfromO(target);
+      //mirror symbols in other boxes across the O diagonal
+      for (int i = 4; i < gridSize; i++){
+        mSquare horizontalSquare = grid[i][target.getYIndex()];
+        if (horizontalSquare != null && !inSameBox(target, horizontalSquare) && !horizontalSquare.getText().equals("")){
+          int yIndex = horizontalSquare.getXIndex();
+          int xIndex = target.getXIndex();
+          if (murdleCategories == 4){
+            yIndex += murdleSuspectCount;
+            if (yIndex >= gridSize) yIndex -= murdleSuspectCount * 2;
           }
-          else if (horizontalSquares.getText().equals("o") || horizontalSquares.getText().equals("x")){
-            if(horizontalSquares.getXIndex() >= murdleSuspectCount){
-              int yIndex = horizontalSquares.getXIndex() + murdleSuspectCount;
-              if (yIndex >= gridSize){
-                yIndex -= murdleSuspectCount * 2;
-              }
-              mSquare flippedSquare = grid[move.getXIndex()][yIndex];
-              if (flippedSquare != null){
-                if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
-                  if (horizontalSquares.getText().equals("o")) flippedSquare.setText("x");
-                  moves.add(flippedSquare);
-                }
-              }
-            }
-            if (move.getXIndex() >= murdleSuspectCount){
-              int yIndex = move.getXIndex() + murdleSuspectCount;
-              if (yIndex >= gridSize){
-                yIndex -= murdleSuspectCount * 2;
-              }
-              mSquare flippedSquare = grid[horizontalSquares.getXIndex()][yIndex];
-              if (flippedSquare != null){
-                if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
-                  if (horizontalSquares.getText().equals("o")) flippedSquare.setText("x");
-                  moves.add(flippedSquare);
-                }
-              }
-            }
-          }
+          addFlippedSquareToMoves(grid[xIndex][yIndex], horizontalSquare.getText());
         }
-        if (VerticalSquares != null){
-          if (VerticalSquares.getYIndex() / murdleSuspectCount == move.getYIndex() / murdleSuspectCount){
-            if (!moves.contains(VerticalSquares) && VerticalSquares.getText().equals("")){
-              moves.add(VerticalSquares);
-            }
+        mSquare VerticalSquare = grid[target.getXIndex()][i];
+        if (VerticalSquare != null && !inSameBox(target, VerticalSquare) && !VerticalSquare.getText().equals("")){
+          int xIndex = VerticalSquare.getYIndex();
+          int yIndex = target.getYIndex();
+          if (murdleCategories == 4){
+            xIndex += murdleSuspectCount;
+            if (xIndex >= gridSize) xIndex -= murdleSuspectCount * 2;
           }
-          else if (VerticalSquares.getText().equals("o") || VerticalSquares.getText().equals("x")){
-            if (VerticalSquares.getYIndex() >= murdleSuspectCount){
-              int xIndex = VerticalSquares.getYIndex() + murdleSuspectCount;
-              if (xIndex >= gridSize){
-                xIndex -= murdleSuspectCount * 2;
-              }
-              mSquare flippedSquare = grid[xIndex][move.getYIndex()];
-              if (flippedSquare != null){
-                if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
-                  if (VerticalSquares.getText().equals("o")) flippedSquare.setText("x");
-                  moves.add(flippedSquare);
-                }
-              }
-            }
-            if (move.getYIndex() >= murdleSuspectCount){
-              int xIndex = move.getYIndex() + murdleSuspectCount;
-              if (xIndex >= gridSize){
-                xIndex -= murdleSuspectCount * 2;
-              }
-              mSquare flippedSquare = grid[xIndex][VerticalSquares.getYIndex()];
-              if (flippedSquare != null){
-                if (!moves.contains(flippedSquare) && flippedSquare.getText().equals("")){
-                  if (VerticalSquares.getText().equals("o")) flippedSquare.setText("x");
-                  moves.add(flippedSquare);
-                }
-              }
-            }
-          }
+          addFlippedSquareToMoves(grid[xIndex][yIndex], VerticalSquare.getText());
         }
       }
     }
-    moves.remove(move);
+    //move is in an o row or col
+    for (int i = 0; i < gridSize; i++){
+      mSquare horizontalSquare = grid[i][target.getYIndex()];
+      if (horizontalSquare != null && target.getXIndex() >= 4 && !inSameBox(target, horizontalSquare) && horizontalSquare.getText().equals("o")){
+        int xIndex = horizontalSquare.getXIndex();
+        int yIndex = target.getXIndex();
+        if (murdleCategories == 4){
+          yIndex += murdleSuspectCount;
+          if (yIndex >= gridSize) yIndex -= murdleSuspectCount * 2;
+        }
+        addFlippedSquareToMoves(grid[xIndex][yIndex], selectedText);
+      }
+      mSquare VerticalSquare = grid[target.getXIndex()][i];
+      if (VerticalSquare != null && target.getYIndex() >= 4 && !inSameBox(target, VerticalSquare) && VerticalSquare.getText().equals("o")){
+        int yIndex = VerticalSquare.getYIndex();
+        int xIndex = target.getYIndex();
+        if (murdleCategories == 4){
+          xIndex += murdleSuspectCount;
+          if (xIndex >= gridSize) xIndex -= murdleSuspectCount * 2;
+        }
+        addFlippedSquareToMoves(grid[xIndex][yIndex], selectedText);
+      }
+    }
     checkThreeXInAllBoxes();
   }
+}
+
+void addFlippedSquareToMoves(mSquare f, String t){
+  if (f != null && !hasMove(moves, f) && f.getText().equals("")){
+    moves.add(new Move(f, t));
+  }
+}
+boolean inSameBox(mSquare s1, mSquare s2){
+  if (s1 == null) return false;
+  if (s2 == null) return false;
+  if (s1.getXIndex() / murdleSuspectCount == s2.getXIndex() / murdleSuspectCount &&
+      s1.getYIndex() / murdleSuspectCount == s2.getYIndex() / murdleSuspectCount)
+  {
+    return true;
+  }
+  return false;
+}
+
+void setAboveOtoX(mSquare xSquare, mSquare up){
+  if (up == null) return;
+  if (!inSameBox(xSquare, up)) return;
+  if (!hasMove(moves, up) && up.getText().equals("")){
+    moves.add(new Move(up, "x"));
+  }
+  int yIndex = up.getYIndex();
+  if (yIndex > 0) {
+    setAboveOtoX(xSquare, grid[xSquare.getXIndex()][yIndex-1]);
+  }
+}
+
+void setBelowOtoX(mSquare xSquare, mSquare down){
+  if (down == null) return;
+  if (!inSameBox(xSquare, down)) return;
+  if (!hasMove(moves, down) && down.getText().equals("")){
+    moves.add(new Move(down, "x"));
+  }
+  int yIndex = down.getYIndex();
+  if (yIndex < gridSize - 1) {
+    setBelowOtoX(xSquare, grid[xSquare.getXIndex()][down.getYIndex()+1]);
+  }
+}
+
+void setLeftOtoX(mSquare xSquare, mSquare left){
+  if (left == null) return;
+  if (!inSameBox(xSquare, left)) return;
+  if (!hasMove(moves, left) && left.getText().equals("")){
+    moves.add(new Move(left, "x"));
+  }
+  int xIndex = left.getXIndex();
+  if (xIndex > 0) {
+    setLeftOtoX(xSquare, grid[xIndex -1][xSquare.getYIndex()]);
+  }
+}
+
+void setRightOtoX(mSquare xSquare, mSquare right){
+  if (right == null) return;
+  if (!inSameBox(xSquare, right)) return;
+  if (!hasMove(moves, right) && right.getText().equals("")){
+    moves.add(new Move(right, "x"));
+  }
+  int xIndex = right.getXIndex();
+  if (xIndex < gridSize - 1) {
+    setRightOtoX(xSquare, grid[right.getXIndex() +1][xSquare.getYIndex()]);
+  }
+}
+
+void setCrossXfromO(mSquare oSquare){
+  int yIndex = oSquare.getYIndex();
+  int xIndex = oSquare.getXIndex();
+  if (yIndex > 0) setAboveOtoX(oSquare, grid[xIndex][yIndex -1]);
+  if (xIndex > 0) setLeftOtoX(oSquare, grid[xIndex -1][yIndex]);
+  if (yIndex < gridSize -1) setBelowOtoX(oSquare, grid[xIndex][yIndex +1]);
+  if (xIndex < gridSize -1) setRightOtoX(oSquare, grid[xIndex +1][yIndex]);
+}
+
+boolean hasMove(ArrayList<Move> moves, mSquare move){
+  for (Move m: moves){
+    if (move == m.getMove()) return true;
+  }
+  return false;
 }
