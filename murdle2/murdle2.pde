@@ -164,14 +164,21 @@ void checkThreeXInBox(mSquare[][] grid, int leftX, int topY){
 }
 
 void checkThreeXInAllBoxes(){
-  checkThreeXInBox(grid, 0, 0);
-  checkThreeXInBox(grid, 0, murdleSuspectCount);
-  checkThreeXInBox(grid, 0, murdleSuspectCount * 2);
-  
-  checkThreeXInBox(grid, murdleSuspectCount, 0);
-  checkThreeXInBox(grid, murdleSuspectCount, murdleSuspectCount);
-  
-  checkThreeXInBox(grid, murdleSuspectCount * 2, 0);
+  if(murdleCategories == 4){
+    checkThreeXInBox(grid, 0, 0);
+    checkThreeXInBox(grid, 0, murdleSuspectCount);
+    checkThreeXInBox(grid, 0, murdleSuspectCount * 2);
+    
+    checkThreeXInBox(grid, murdleSuspectCount, 0);
+    checkThreeXInBox(grid, murdleSuspectCount, murdleSuspectCount);
+    
+    checkThreeXInBox(grid, murdleSuspectCount * 2, 0);
+  }
+  else {
+    checkThreeXInBox(grid, 0, 0);
+    checkThreeXInBox(grid, 0, murdleSuspectCount);
+    checkThreeXInBox(grid, murdleSuspectCount, 0);
+  }
 }
 
 mSquare[][] newGrid(int categories, int suspectCount){
