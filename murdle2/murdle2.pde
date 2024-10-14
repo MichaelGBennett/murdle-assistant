@@ -272,6 +272,36 @@ void processMoves(){
           addFlippedSquareToMoves(grid[xIndex][yIndex], VerticalSquare.getText());
         }
       }
+      //look for o pairs
+      int tx = target.getXIndex();
+      int ty = target.getYIndex();
+      int fx = ty;
+      int fy = tx;
+      if (murdleCategories == 4){
+        fx = getFlippedIndex(ty);
+        fy = getFlippedIndex(tx);
+        for (int i = 0; i < gridSize; i++){
+          mSquare flipped = grid[i][fy];
+          mSquare cross = grid[i][ty];
+          if (tx / murdleSuspectCount > i / murdleSuspectCount && ty / murdleSuspectCount < fy / murdleSuspectCount){
+            addCrossedSquaresToMove(flipped, cross);
+          }
+          flipped = grid[fx][i];
+          cross = grid[tx][i];
+          if (ty / murdleSuspectCount > i / murdleSuspectCount && tx / murdleSuspectCount < fx / murdleSuspectCount)
+          addCrossedSquaresToMove(flipped, cross);
+        }
+      }
+      else {//3 categories
+        for (int i = 0; i < murdleSuspectCount; i++){
+          mSquare flipped = grid[i][fy];
+          mSquare cross = grid[i][ty];
+          addCrossedSquaresToMove(flipped, cross);
+          flipped = grid[fx][i];
+          cross = grid[tx][i];
+          addCrossedSquaresToMove(flipped, cross);
+        }
+      }
     }
     //move is in an o row or col
     for (int i = 0; i < gridSize; i++){
@@ -305,6 +335,19 @@ void addFlippedSquareToMoves(mSquare f, String t){
     moves.add(new Move(f, t));
   }
 }
+
+void addCrossedSquaresToMove(mSquare flipped, mSquare cross){
+  if (flipped != null && cross != null && !hasMove(moves, cross) && flipped.getText().equals("o") && cross.getText().equals("")){
+    moves.add(new Move(cross, "o"));
+  }
+}
+
+int getFlippedIndex(int index){
+  int flipped = index + murdleSuspectCount;
+  if (flipped >= gridSize) flipped -= murdleSuspectCount * 2;
+  return flipped;
+}
+
 boolean inSameBox(mSquare s1, mSquare s2){
   if (s1 == null) return false;
   if (s2 == null) return false;
