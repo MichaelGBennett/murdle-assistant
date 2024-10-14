@@ -280,6 +280,17 @@ void processMoves(){
       if (murdleCategories == 4){
         fx = getFlippedIndex(ty);
         fy = getFlippedIndex(tx);
+        for (int i = 0; i < gridSize; i++){
+          mSquare flipped = grid[i][fy];
+          mSquare cross = grid[i][ty];
+          if (tx / murdleSuspectCount > i / murdleSuspectCount && ty / murdleSuspectCount < fy / murdleSuspectCount){
+            addCrossedSquaresToMove(flipped, cross);
+          }
+          flipped = grid[fx][i];
+          cross = grid[tx][i];
+          if (ty / murdleSuspectCount > i / murdleSuspectCount && tx / murdleSuspectCount < fx / murdleSuspectCount)
+          addCrossedSquaresToMove(flipped, cross);
+        }
       }
       else {//3 categories
         for (int i = 0; i < murdleSuspectCount; i++){
